@@ -17,6 +17,27 @@ type Card struct {
 	timeStamp time.Time
 }
 
+type Job int
+
+const (
+	J1_CARD_DEPOSIT Job = iota
+	J2_CARD_WITHDRAW
+	J3_SHOP_SALE
+	J4_SHOP_REFUND
+)
+
+type Trans struct {
+	card Card
+	device Device
+	host Device
+	value int
+	cashReceive int
+	change int
+}
+func (t Trans) Job1CardDeposit(card Card, device Device, host Device, value, cashReceive, change int) {
+
+}
+
 func NewSite(name string) *Site {
 	s := new(Site)
 	s.Name = name
@@ -79,3 +100,4 @@ func (d *Device) Credit(value int) {
 	d.credit = value
 	d.balance = d.balance - d.credit
 }
+
