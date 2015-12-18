@@ -27,15 +27,40 @@ const (
 )
 
 type Trans struct {
-	card Card
-	device Device
-	host Device
-	value int
+	Job
+	*Card
+	device      *Device
+	host        *Device
+	value       int
 	cashReceive int
-	change int
+	change      int
+	timeStamp   time.Time
 }
-func (t Trans) Job1CardDeposit(card Card, device Device, host Device, value, cashReceive, change int) {
 
+func (t *Trans) Job1CardDeposit(card *Card, device *Device, host *Device, value, cashReceive, change int) *Trans {
+	t.Job = J1_CARD_DEPOSIT
+	t.Card = card
+	t.device = device
+	t.host = host
+	t.value = value
+	t.cashReceive = cashReceive
+	t.change = change
+	t.timeStamp = time.Now()
+	card.Credit(value)
+	return t
+}
+
+func (t *Trans) Job3ShopSales(card *Card, device *Device, host *Device, value int) *Trans {
+	t.Job = J3_SHOP_SALE
+	t.Card = card
+	t.device = device
+	t.host = host
+	t.value = value
+	t.cashReceive = 0
+	t.change = 0
+	t.timeStamp = time.Now()
+	device.Debit(value)
+	return t
 }
 
 func NewSite(name string) *Site {
@@ -57,12 +82,12 @@ func NewCard(site *Site, code string, group string) *Card {
 
 func (c *Card) Debit(value int) {
 	c.debit = value
-	c.balance = c.balance + c.debit
+	c.balance = c.balance - c.debit
 }
 
 func (c *Card) Credit(value int) {
 	c.credit = value
-	c.balance = c.balance - c.credit
+	c.balance = c.balance + c.credit
 }
 
 type Device struct {
@@ -78,7 +103,7 @@ type Device struct {
 	isOnline bool
 }
 
-func NewDevice(name, group, serial string) *Device{
+func NewDevice(name, group, serial string) *Device {
 	d := new(Device)
 	d.Name = name
 	d.Group = group
@@ -101,3 +126,18 @@ func (d *Device) Credit(value int) {
 	d.balance = d.balance - d.credit
 }
 
+type Shop struct {
+	*Site
+	Name    string
+	Vendor  *Device
+	balance int
+}
+
+func NewShop(site *Site, name string, vendor *Device) *Shop {
+	s := new(Shop)
+	s.Site = site
+	s.Name = name
+	s.Vendor = vendor
+	s.balance = 0
+	return s
+}

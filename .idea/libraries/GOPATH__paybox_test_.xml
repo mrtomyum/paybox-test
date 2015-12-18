@@ -15,6 +15,7 @@
     <JAVADOC />
     <SOURCES />
     <excluded>
+      <root url="file://$PROJECT_DIR$/../../guregu/null/.git" />
       <root url="file://$PROJECT_DIR$/../../../9fans.net/go/.git" />
       <root url="file://$PROJECT_DIR$/../../../bitbucket.org/mrtomyum/paybox-server/.git" />
       <root url="file://$PROJECT_DIR$/../../bradfitz/gomemcache/.git" />
