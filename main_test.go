@@ -29,15 +29,24 @@ func TestCardBalance(t *testing.T) {
 		t.Error("Expected debit = 100 card balance = 100 ")
 	}
 	if c.Credit(30); c.balance != 70 {
-		t.Error("Expected credit 50 should decrese balance = 70")
+		t.Error("Expected credit 30 should decrese balance = 70")
 	}
 }
 
 func TestDeviceBalance(t *testing.T) {
 	if p1.Debit(100); p1.balance != 100 {
-		t.Error("Expected debit = 100 card balance = 100 ")
+		t.Error("Expected debit = 100 box balance = 100 ")
 	 }
 	if p1.Credit(30); p1.balance != 70 {
-		t.Error("Expected debit = 30 card balance = 70")
+		t.Error("Expected credit 30 box balance = 70")
+	}
+	// ลองเอาบัตรซื้อของอาหารราคา 40 บาท
+	if v1.Debit(40); v1.balance != 40 {
+		t.Error("Expected debit  40 vendor balance = 40")
+	}
+	if v1.Credit(5); v1.balance != 35 {
+		t.Error("Expected credit 5 vendor balance = 35")
 	}
 }
+
+
