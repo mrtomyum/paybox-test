@@ -8,13 +8,12 @@ type Site struct {
 
 type Card struct {
 	*Site
-	Code      string
-	Group     string
-	Status    string
-	debit     int
-	credit    int
-	balance   int
-	timeStamp time.Time
+	Code    string
+	Group   string
+	Status  string
+	debit   int
+	credit  int
+	balance int
 }
 
 type Job int
@@ -47,6 +46,7 @@ func (t *Trans) Job1CardDeposit(card *Card, device *Device, host *Device, value,
 	t.change = change
 	t.timeStamp = time.Now()
 	card.Credit(value)
+	host.Debit(value)
 	return t
 }
 
@@ -59,7 +59,8 @@ func (t *Trans) Job3ShopSales(card *Card, device *Device, host *Device, value in
 	t.cashReceive = 0
 	t.change = 0
 	t.timeStamp = time.Now()
-	device.Debit(value)
+	card.Debit(value)
+	device.Credit(value)
 	return t
 }
 
@@ -76,7 +77,6 @@ func NewCard(site *Site, code string, group string) *Card {
 	c.Group = group
 	c.Status = "OPEN"
 	c.balance = 0
-	c.timeStamp = time.Now()
 	return c
 }
 
