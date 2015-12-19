@@ -6,6 +6,12 @@ type Site struct {
 	Name string
 }
 
+func NewSite(name string) *Site {
+	s := new(Site)
+	s.Name = name
+	return s
+}
+
 type Card struct {
 	*Site
 	Code    string
@@ -45,8 +51,8 @@ func (t *Trans) Job1CardDeposit(card *Card, device *Device, host *Device, value,
 	t.cashReceive = cashReceive
 	t.change = change
 	t.timeStamp = time.Now()
+	device.Debit(value)
 	card.Credit(value)
-	host.Debit(value)
 	return t
 }
 
@@ -62,12 +68,6 @@ func (t *Trans) Job3ShopSales(card *Card, device *Device, host *Device, value in
 	card.Debit(value)
 	device.Credit(value)
 	return t
-}
-
-func NewSite(name string) *Site {
-	s := new(Site)
-	s.Name = name
-	return s
 }
 
 func NewCard(site *Site, code string, group string) *Card {
@@ -140,4 +140,9 @@ func NewShop(site *Site, name string, vendor *Device) *Shop {
 	s.Vendor = vendor
 	s.balance = 0
 	return s
+}
+
+type Balancer interface {
+	Debit(value int)
+	Credit(value int)
 }

@@ -53,9 +53,9 @@ func TestDeviceBalance(t *testing.T) {
 }
 
 func TestTransCalCardDeviceBalance(t *testing.T) {
-	trans := new(Trans)
+	tn := new(Trans)
 
-	trans.Job1CardDeposit( // เติมเงิน 50 ใส่เงิน 100 ทอน 50
+	tn.Job1CardDeposit( // เติมเงิน 50 ใส่เงิน 100 ทอน 50
 		c1,  // Card
 		p1,  // Device Paybox1
 		p1,  // Host Paybox1
@@ -70,7 +70,7 @@ func TestTransCalCardDeviceBalance(t *testing.T) {
 		t.Errorf("Expected เติมเงิน 100 ต้องมีเงินในบัตรเพิ่ม c1.credit != 50 got %v|| c1.balance != 50 got %v||  p1.debit != 50 got %v|| p1.balance != 50 got %v", c1.credit, c1.balance, p1.debit, p1.balance)
 	}
 
-	trans.Job3ShopSales(
+	tn.Job3ShopSales(
 		c1, // Card
 		v1, // Device Vendor1
 		p1, // Host Paybox1
