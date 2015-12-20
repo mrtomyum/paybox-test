@@ -1,18 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
 var (
 	s  = NewSite("SUS Lampoon")
 	c1 = NewCard(s, "123456", "PURSE")
+	pb = NewDevice("Paybox1", "BOX", "P001")
+	v1 = NewDevice("V1", "VENDOR", "V001")
 
-	p1  = NewDevice("Paybox1", "BOX", "P001")
-	v1  = NewDevice("V1", "VENDOR", "V001")
-	v2  = NewDevice("V2", "VENDOR", "V002")
-	v3  = NewDevice("V3", "VENDOR", "V003")
-	sh1 = NewShop(s, "ร้านข้าวมันไก่", v1)
+//	v2  = NewDevice("V2", "VENDOR", "V002")
+//	v3  = NewDevice("V3", "VENDOR", "V003")
+//	sh1 = NewShop(s, "ร้านข้าวมันไก่", v1)
 )
 
 func TestNewCard(t *testing.T) {
@@ -26,11 +27,11 @@ func TestNewCard(t *testing.T) {
 
 func TestCardBalance(t *testing.T) {
 	c := NewCard(s, "123456", "PURSE")
-	if c.Credit(100); c.balance != 100 {
-		t.Error("Expected credit 30 should decrese balance = 70")
+	if c.Credit(100); c.balance != -100 {
+		t.Error("Expected credit -100")
 	}
-	if c.Debit(30); c.balance != 70 {
-		t.Error("Expected debit = 100 card balance = 100 ")
+	if c.Debit(30); c.balance != -70 {
+		t.Error("Expected card balance = -70 ")
 	}
 }
 
@@ -52,39 +53,77 @@ func TestDeviceBalance(t *testing.T) {
 	}
 }
 
-func TestTransCalCardDeviceBalance(t *testing.T) {
+func Test_TransJob1_CardDeposit(t *testing.T) {
+	// เติมเงินเข้าบัตรใหม่
+	value := 100
+	cash := 100
 	tn := new(Trans)
-
-	tn.Job1CardDeposit( // เติมเงิน 50 ใส่เงิน 100 ทอน 50
-		c1,  // Card
-		p1,  // Device Paybox1
-		p1,  // Host Paybox1
-		50,  // Value 50
-		100, // CashReceive 10
-		50,  // Change
+	tn.Job1_CardDeposit( // เติมเงิน 50 ใส่เงิน 100 ทอน 50
+		c1,    // Card
+		pb,    // Device Paybox1
+		pb,    // Host Paybox1
+		value, // Value 50
+		cash,  // CashReceive 10
 	)
-	if c1.credit != 50 ||
-		c1.balance != 50 ||
-		p1.debit != 50 ||
-		p1.balance != 50 {
-		t.Errorf("Expected เติมเงิน 100 ต้องมีเงินในบัตรเพิ่ม c1.credit != 50 got %v|| c1.balance != 50 got %v||  p1.debit != 50 got %v|| p1.balance != 50 got %v", c1.credit, c1.balance, p1.debit, p1.balance)
+	if c1.balance != -100 ||
+		pb.balance != 100 {
+		t.Errorf("Expected เติมเงิน 100 ต้องมีเงินในบัตรเพิ่ม c1.credit != 50 got %v|| c1.balance != 50 got %v||  p1.debit != 50 got %v|| p1.balance != 50 got %v", c1.credit, c1.balance, pb.debit, pb.balance)
 	}
-
-	tn.Job3ShopSales(
-		c1, // Card
-		v1, // Device Vendor1
-		p1, // Host Paybox1
-		20, // Value 20
+	fmt.Println(
+		"1.เติมเงินเข้าบัตร: ",
+		"Value =", value,
+		"c1.balance =", c1.balance,
+		"p1.balance =", pb.balance,
+		"tn.change =", tn.change,
 	)
-	if c1.debit != 20 ||
-		c1.balance != 30 ||
-		v1.credit != 20 ||
+}
+
+func Test_TransJob3_ShopPayment(t *testing.T) {
+	// ชำระเงินจากบัตรให้ร้านค้า 20 บาท
+	value := 20
+	tn := new(Trans)
+	tn.Job3_ShopPayment(
+		c1,    // Card
+		v1,    // Device Vendor1
+		pb,    // Host Paybox1
+		value, // Value 20
+	)
+	if c1.balance != -80 ||
 		v1.balance != -20 {
-		t.Errorf("Expected ซื้อของ 20 เดบิตเงินในบัตร 20 got %v บัตรคงเหลือ 30 got %v เครดิตเงิน Vendor เพิ่ม 20 got %v คงเหลือ -20 got %v", c1.debit, c1.balance, v1.credit, v1.balance)
+		t.Errorf("Expected ShopPayment 20 c1.balance = 80/%v  v1.balance = -20/%v", c1.balance, v1.balance)
 	}
+	fmt.Println(
+		"3.ชำระเงินร้านค้า: ",
+		"Value =", value,
+		"c1.balance=", c1.balance,
+		"v1.balance=", v1.balance,
+	)
+}
+
+func Test_TransJob2_CardWithdraw(t *testing.T) {
+	// คืนเงินตามจำนวนที่กำหนด แต่ไม่เกินมูลค่าคงเหลือ balance ในบัตร
+	value := 80
+	tn := new(Trans)
+	tn.Job2_CardWithdraw(
+		c1,    // Card
+		pb,    // Device Paybox1
+		pb,    // Host Paybox1
+		value, // Value 30
+	)
+	if c1.balance != 0 ||
+		pb.balance != 20 {
+		t.Errorf("Expected c1.balance = 0/%d  p1.balance = 20/%d", c1.balance, pb.balance)
+	}
+	fmt.Println(
+		"2.คืนเงินจากบัตร:  ",
+		"Value =", value,
+		"c1.balance=", c1.balance,
+		"p1.balance=", pb.balance,
+		"tn.change=", tn.change,
+	)
 }
 
 // Test Interface Balancer implement Method Debit(), Credit()
-func TestBalancer(t *testing.T) {
+func Test_Balancer(t *testing.T) {
 
 }

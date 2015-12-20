@@ -1,7 +1,5 @@
 package main
 
-import "time"
-
 type Site struct {
 	Name string
 }
@@ -12,6 +10,11 @@ func NewSite(name string) *Site {
 	return s
 }
 
+type Balancer interface {
+	Debit(value int)
+	Credit(value int)
+}
+
 type Card struct {
 	*Site
 	Code    string
@@ -20,54 +23,6 @@ type Card struct {
 	debit   int
 	credit  int
 	balance int
-}
-
-type Job int
-
-const (
-	J1_CARD_DEPOSIT Job = iota
-	J2_CARD_WITHDRAW
-	J3_SHOP_SALE
-	J4_SHOP_REFUND
-)
-
-type Trans struct {
-	Job
-	*Card
-	device      *Device
-	host        *Device
-	value       int
-	cashReceive int
-	change      int
-	timeStamp   time.Time
-}
-
-func (t *Trans) Job1CardDeposit(card *Card, device *Device, host *Device, value, cashReceive, change int) *Trans {
-	t.Job = J1_CARD_DEPOSIT
-	t.Card = card
-	t.device = device
-	t.host = host
-	t.value = value
-	t.cashReceive = cashReceive
-	t.change = change
-	t.timeStamp = time.Now()
-	device.Debit(value)
-	card.Credit(value)
-	return t
-}
-
-func (t *Trans) Job3ShopSales(card *Card, device *Device, host *Device, value int) *Trans {
-	t.Job = J3_SHOP_SALE
-	t.Card = card
-	t.device = device
-	t.host = host
-	t.value = value
-	t.cashReceive = 0
-	t.change = 0
-	t.timeStamp = time.Now()
-	card.Debit(value)
-	device.Credit(value)
-	return t
 }
 
 func NewCard(site *Site, code string, group string) *Card {
@@ -82,12 +37,12 @@ func NewCard(site *Site, code string, group string) *Card {
 
 func (c *Card) Debit(value int) {
 	c.debit = value
-	c.balance = c.balance - c.debit
+	c.balance = c.balance + c.debit
 }
 
 func (c *Card) Credit(value int) {
 	c.credit = value
-	c.balance = c.balance + c.credit
+	c.balance = c.balance - c.credit
 }
 
 type Device struct {
@@ -140,9 +95,4 @@ func NewShop(site *Site, name string, vendor *Device) *Shop {
 	s.Vendor = vendor
 	s.balance = 0
 	return s
-}
-
-type Balancer interface {
-	Debit(value int)
-	Credit(value int)
 }
