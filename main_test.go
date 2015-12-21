@@ -79,18 +79,22 @@ func Test_TransJob1_CardDeposit(t *testing.T) {
 	)
 }
 
+// ชำระเงินจากบัตรให้ร้านค้า 20 บาท
 func Test_TransJob3_ShopPayment(t *testing.T) {
-	// ชำระเงินจากบัตรให้ร้านค้า 20 บาท
-	_, c, p, v, tn := setup()
 	value := 20
+	_, c, p, v, tn := setup()
+	c.balance = -100
+	p.balance = 100
+	v.balance = 0
 	tn.Job3_ShopPayment(
 		c,     // Card
-		v,     // Device Vendor1
-		p,     // Host Paybox1
-		value, // Value 20
+		v,     // Device
+		p,     // Host
+		value, // Value
 	)
 	if c.balance != -80 ||
-		v.balance != -20 {
+		v.balance != -20 ||
+		p.balance != 100 {
 		t.Errorf("Expected ShopPayment 20 c1.balance = 80/%v  v1.balance = -20/%v", c.balance, v.balance)
 	}
 	fmt.Println(
@@ -101,10 +105,13 @@ func Test_TransJob3_ShopPayment(t *testing.T) {
 	)
 }
 
+// คืนเงินตามจำนวนที่กำหนด แต่ไม่เกินมูลค่าคงเหลือ balance ในบัตร
 func Test_TransJob2_CardWithdraw(t *testing.T) {
-	// คืนเงินตามจำนวนที่กำหนด แต่ไม่เกินมูลค่าคงเหลือ balance ในบัตร
-	_, c, p, v, tn := setup()
 	value := 50
+	_, c, p, v, tn := setup()
+	c.balance = -80
+	p.balance = 100
+	v.balance = -20
 	tn.Job2_CardWithdraw(
 		c,     // Card
 		p,     // Device Paybox1
@@ -124,24 +131,24 @@ func Test_TransJob2_CardWithdraw(t *testing.T) {
 	)
 }
 
+// ถอนเงินเกินจำนวนคงเหลือในบัตรต้อง err != nil และแจ้งเตือน
 func Test_TransJob21_CardOverWithdraw(t *testing.T) {
-	// ถอนเงินเกินจำนวนคงเหลือในบัตรต้อง err != nil และแจ้งเตือน
+	_, c, p, _, tn := setup()
 	value := 100
-	tn := new(Trans)
 	err := tn.Job2_CardWithdraw(
-		c1,    // Card
-		pb,    // Device
-		pb,    // Host
+		c,     // Card
+		p,     // Device
+		p,     // Host
 		value, // Value
 	)
 	if err == nil {
-		t.Error("ถอนเงินเกินจำนวนคงเหลือ...แต่ไม่แจ้งเตือน err =", err, c1.balance, pb.balance)
+		t.Error("ถอนเงินเกินจำนวนคงเหลือ...แต่ไม่แจ้งเตือน err =", err, c.balance, p.balance)
 	}
 	fmt.Println(
 		"21.ถอนเงินเกินจากบัตร:  ",
 		"Value =", value,
-		"c1.balance=", c1.balance,
-		"pb.balance=", pb.balance,
+		"c1.balance=", c.balance,
+		"pb.balance=", p.balance,
 		"tn.change=", tn.change,
 	)
 }
