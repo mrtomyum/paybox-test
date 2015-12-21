@@ -102,7 +102,7 @@ func Test_TransJob3_ShopPayment(t *testing.T) {
 
 func Test_TransJob2_CardWithdraw(t *testing.T) {
 	// คืนเงินตามจำนวนที่กำหนด แต่ไม่เกินมูลค่าคงเหลือ balance ในบัตร
-	value := 80
+	value := 50
 	tn := new(Trans)
 	tn.Job2_CardWithdraw(
 		c1,    // Card
@@ -110,9 +110,9 @@ func Test_TransJob2_CardWithdraw(t *testing.T) {
 		pb,    // Host Paybox1
 		value, // Value 30
 	)
-	if c1.balance != 0 ||
-		pb.balance != 20 {
-		t.Errorf("Expected c1.balance = 0/%d  p1.balance = 20/%d", c1.balance, pb.balance)
+	if c1.balance != -30 ||
+		pb.balance != 50 {
+		t.Errorf("Expected c1.balance = -30/%d  pb.balance = 50/%d", c1.balance, pb.balance)
 	}
 	fmt.Println(
 		"2.คืนเงินจากบัตร:  ",
@@ -123,7 +123,29 @@ func Test_TransJob2_CardWithdraw(t *testing.T) {
 	)
 }
 
-// Test Interface Balancer implement Method Debit(), Credit()
-func Test_Balancer(t *testing.T) {
-
+func Test_TransJob21_CardOverWithdraw(t *testing.T) {
+	// ถอนเงินเกินจำนวนคงเหลือในบัตรต้อง err != nil และแจ้งเตือน
+	value := 100
+	tn := new(Trans)
+	err := tn.Job2_CardWithdraw(
+		c1,    // Card
+		pb,    // Device
+		pb,    // Host
+		value, // Value
+	)
+	if err == nil {
+		t.Error("ถอนเงินเกินจำนวนคงเหลือ...แต่ไม่แจ้งเตือน err =", err, c1.balance, pb.balance)
+	}
+	fmt.Println(
+		"21.ถอนเงินเกินจากบัตร:  ",
+		"Value =", value,
+		"c1.balance=", c1.balance,
+		"pb.balance=", pb.balance,
+		"tn.change=", tn.change,
+	)
 }
+
+// Test Interface Balancer implement Method Debit(), Credit()
+//func Test_Balancer(t *testing.T) {
+//
+//}

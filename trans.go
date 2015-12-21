@@ -1,9 +1,9 @@
 package main
 
 import (
+	"errors"
+	"math"
 	"time"
-	//	"log"
-	//	"math"
 )
 
 type Job int
@@ -40,11 +40,12 @@ func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value
 	t.timeStamp = time.Now()
 	return t
 }
-func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, value int) *Trans {
-	//ยังติดปัญหา ABS ค่า value ไม่ได้
-	//	if value > card.balance {
-	//		log.Fatalf("มูลค่าคงเหลือในบัตร %d ไม่พอจ่าย %d", card.balance, value)
-	//	}
+func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, value int) (err error) {
+	// ควรเช็คก่อนว่า card.balance พอหรือไม่?
+	abs := int(math.Abs(float64(card.balance))) // math.Abs use float64
+	if value > abs {
+		return errors.New("ไม่สามารถถอนเงิน'เกิน'มูลค่าคงเหลือในบัตร")
+	}
 	// Balancer
 	card.Debit(value)
 	device.Credit(value)
@@ -57,7 +58,9 @@ func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, valu
 	t.cash = 0
 	t.change = t.cash - t.value
 	t.timeStamp = time.Now()
-	return t
+
+	err = nil
+	return err
 }
 
 func (t *Trans) Job3_ShopPayment(card *Card, device *Device, host *Device, value int) *Trans {
