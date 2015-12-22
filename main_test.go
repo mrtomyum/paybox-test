@@ -17,6 +17,7 @@ func setup() (site *Site, card *Card, paybox, vendor *Device, trans *Trans) {
 	return site, card, paybox, vendor, trans
 }
 
+// เทสสร้างบัตรใหม่
 func TestNewCard(t *testing.T) {
 	s, c, _, _, _ := setup()
 	if s.Name != "SUS Lampoon" {
@@ -27,6 +28,7 @@ func TestNewCard(t *testing.T) {
 	}
 }
 
+// เทสคำนวณยอดคงเหลือบัตร
 func TestCardBalance(t *testing.T) {
 	_, c, _, _, _ := setup()
 	if c.Credit(100); c.balance != -100 {
@@ -37,6 +39,7 @@ func TestCardBalance(t *testing.T) {
 	}
 }
 
+// เทสคำนวณยอดคงเหลือใน Device ทั้ง Paybox และ Vendor
 func TestDeviceBalance(t *testing.T) {
 	_, _, p, v, _ := setup()
 	if p.Debit(100); p.balance != 100 {
@@ -54,17 +57,17 @@ func TestDeviceBalance(t *testing.T) {
 	}
 }
 
-// เติมเงินเข้าบัตรใหม่ เงินที่เติมต้อง >= 1 บาท
+// เติมเงินเข้าบัตรใหม่
 func Test_TransJob1_CardDeposit(t *testing.T) {
 	_, c, p, _, tn := setup()
 	value := 100
 	cash := 100
 	tn.Job1_CardDeposit( // เติมเงิน 50 ใส่เงิน 100 ทอน 50
 		c,     // Card
-		p,     // Device Paybox1
-		p,     // Host Paybox1
-		value, // Value 50
-		cash,  // CashReceive 10
+		p,     // Device
+		p,     // Host
+		value, // Value
+		cash,  // CashReceive
 	)
 	if c.balance != -100 ||
 		p.balance != 100 {
@@ -77,6 +80,23 @@ func Test_TransJob1_CardDeposit(t *testing.T) {
 		"p1.balance =", p.balance,
 		"tn.change =", tn.change,
 	)
+}
+
+func Test_TransJob11_CardDepositMustGreaterThan1(t *testing.T) {
+	_, c, p, _, tn := setup()
+	value := 0
+	cash := 0
+	err := tn.Job1_CardDeposit(
+		c,     // Card
+		p,     // Device
+		p,     // Host
+		value, // Value
+		cash,  // CashReceive
+	)
+	if err == nil {
+		t.Errorf("ยอดเงินเติมน้อยกว่าขั้นต่ำ %d แต่ไม่แจ้งเตือน err", value)
+	}
+	fmt.Println("1.1 เทสเติมเงินน้อยกว่า 1 บาท ต้องแสดง Error=>", err)
 }
 
 // ชำระเงินจากบัตรให้ร้านค้า 20 บาท
@@ -105,21 +125,22 @@ func Test_TransJob3_ShopPayment(t *testing.T) {
 	)
 }
 
-// คืนเงินตามจำนวนที่กำหนด แต่ไม่เกินมูลค่าคงเหลือ balance ในบัตร
+// เทสคืนเงินตามจำนวนที่กำหนด
 func Test_TransJob2_CardWithdraw(t *testing.T) {
 	value := 50
 	_, c, p, v, tn := setup()
 	c.balance = -80
 	p.balance = 100
 	v.balance = -20
-	tn.Job2_CardWithdraw(
+	err := tn.Job2_CardWithdraw(
 		c,     // Card
 		p,     // Device Paybox1
 		p,     // Host Paybox1
 		value, // Value 30
 	)
 	if c.balance != -30 ||
-		p.balance != 50 {
+		p.balance != 50 ||
+		err != nil {
 		t.Errorf("Expected c.balance = -30/%d  p.balance = 50/%d", c.balance, p.balance)
 	}
 	fmt.Println(
@@ -131,7 +152,7 @@ func Test_TransJob2_CardWithdraw(t *testing.T) {
 	)
 }
 
-// ถอนเงินเกินจำนวนคงเหลือในบัตรต้อง err != nil และแจ้งเตือน
+// เทสถอนเงินเกินจำนวนคงเหลือในบัตร ต้องแจ้งเตือน
 func Test_TransJob21_CardOverWithdraw(t *testing.T) {
 	_, c, p, _, tn := setup()
 	value := 100
@@ -153,6 +174,12 @@ func Test_TransJob21_CardOverWithdraw(t *testing.T) {
 	)
 }
 
+// เทสคำนวณเพื่อจ่ายเงินให้ร้านค้าหลังหักส่วนแบ่งสถานที่แล้ว 30%
+//func Test_ShopBalancer(t *testing.T)  {
+//	s, c, p, v, tn := setup()
+//	shop := NewShop(s, "ร้านข้าวมันไก่โต้ง", v)
+//
+//}
 // Test Interface Balancer implement Method Debit(), Credit()
 //func Test_Balancer(t *testing.T) {
 //

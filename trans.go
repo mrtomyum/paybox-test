@@ -26,7 +26,11 @@ type Trans struct {
 	timeStamp time.Time
 }
 
-func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value, cash int) *Trans {
+func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value, cash int) error {
+	if value < 1 {
+		return errors.New("เงินไม่เพียงพอ ขั้นต่ำ 1 บาท")
+	}
+
 	device.Debit(value)
 	card.Credit(value)
 
@@ -38,9 +42,9 @@ func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value
 	t.cash = cash
 	t.change = cash - value
 	t.timeStamp = time.Now()
-	return t
+	return nil
 }
-func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, value int) (err error) {
+func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, value int) error {
 	// ควรเช็คก่อนว่า card.balance พอหรือไม่?
 	abs := int(math.Abs(float64(card.balance))) // math.Abs use float64
 	if value > abs {
@@ -58,9 +62,7 @@ func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, valu
 	t.cash = 0
 	t.change = t.cash - t.value
 	t.timeStamp = time.Now()
-
-	err = nil
-	return err
+	return nil
 }
 
 func (t *Trans) Job3_ShopPayment(card *Card, device *Device, host *Device, value int) *Trans {
