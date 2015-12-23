@@ -7,9 +7,8 @@ import (
 
 func init() {
 	InitDB("./server.db")
-	defer db.Close()
+	//	defer db.Close()
 	fmt.Println("TEST START: Initiate Sqlite3 'paybox.db'")
-
 	sites := LoadSites()
 	fmt.Println("Load Site slice:=> ", sites)
 	cards := LoadCards()
@@ -17,33 +16,47 @@ func init() {
 	fmt.Println()
 }
 
-func setup() (site *Site, card *Card, paybox, vendor *Device, trans *Trans) {
-	site = NewSite("SUS Lampoon")
-	card = NewCard(site, "123456", "PURSE")
-	paybox = NewDevice("Paybox1", "BOX", "P001")
-	vendor = NewDevice("V1", "VENDOR", "V001")
+func setup() (sites []Site, cards []Card, paybox, vendor []Device, trans *Trans) {
+	//	site := sites[0]
+	sites = LoadSites()
+	//	card := NewCard(sites[0], "123456", "PURSE")
+	cards = LoadCards()
+	paybox = LoadDevice(BOX)
+	vendor = LoadDevice(VENDOR)
 	trans = new(Trans)
 	//	v2  = NewDevice("V2", "VENDOR", "V002")
 	//	v3  = NewDevice("V3", "VENDOR", "V003")
 	//	sh1 = NewShop(s, "ร้านข้าวมันไก่", v1)
-	return site, card, paybox, vendor, trans
+	return sites, card, paybox, vendor, trans
+}
+
+func setupTable() (sites []Site, cards []Card, paybox, vendor *Device, tn *Trans) {
+	sites = LoadSites()
+	cards = LoadCards()
+	paybox = NewDevice("Paybox1", "BOX", "P001")
+	vendor = NewDevice("V1", "VENDOR", "V001")
+	tn = new(Trans)
+	return sites, cards, paybox, vendor, tn
 }
 
 // เทสว่าการ์ดใหม่ต้องไม่มี code ซ้ำใน site เดียวกัน
-func TestNewCard(t *testing.T) {
-	s, c, _, _, _ := setup()
-
-	if s.Name != "SUS Lampoon" {
-		t.Error("Expected name = 'SUS Lampoon'")
+func Test_NewObject(t *testing.T) {
+	sites, c, _, _, _ := setup()
+	s := sites[0]
+	if s.Name != "บริษัท ทดสอบ จำกัด" {
+		t.Error("Expected name = 'บริษัท ทดสอบ จำกัด'")
 	}
+	//	c := cards[0]
 	if c.Code != "123456" {
 		t.Error("Expected code = '123456'")
 	}
+	fmt.Println("Cards=> ", c)
 }
 
 // เทสคำนวณยอดคงเหลือบัตร
 func TestCardBalance(t *testing.T) {
 	_, c, _, _, _ := setup()
+	//	c := cards[1]
 	if c.Credit(100); c.balance != -100 {
 		t.Error("Expected credit -100")
 	}
@@ -73,6 +86,8 @@ func TestDeviceBalance(t *testing.T) {
 // เติมเงินเข้าบัตรใหม่
 func Test_TransJob1_CardDeposit(t *testing.T) {
 	_, c, p, _, tn := setup()
+	//	_, cards, p, v, tn := setupTable()
+	//	c = cards[1]
 	value := 100
 	cash := 100
 	tn.Job1_CardDeposit( // เติมเงิน 50 ใส่เงิน 100 ทอน 50
@@ -93,6 +108,11 @@ func Test_TransJob1_CardDeposit(t *testing.T) {
 		"p1.balance =", p.balance,
 		"tn.change =", tn.change,
 	)
+}
+
+func Test_Job12_CardDepositFromTable(t *testing.T) {
+	//	_, cards, device, host, tn := setupTable()
+
 }
 
 func Test_TransJob11_CardDepositMustGreaterThan1(t *testing.T) {

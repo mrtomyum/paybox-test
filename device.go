@@ -1,10 +1,19 @@
 package main
 
+type DeviceType int
+
+const (
+	BOX DeviceType = iota
+	VENDOR
+	PARKING_LOCK
+)
+
 type Device struct {
 	*Site
+	DeviceType
+	ID       int
 	Host     *Device
 	Name     string
-	Group    string
 	Serial   string
 	debit    int
 	credit   int
@@ -13,10 +22,10 @@ type Device struct {
 	isOnline bool
 }
 
-func NewDevice(name, group, serial string) *Device {
+func NewDevice(name, deviceType, serial string) *Device {
 	d := new(Device)
 	d.Name = name
-	d.Group = group
+	d.DeviceType = deviceType
 	d.Serial = serial
 	d.debit = 0
 	d.credit = 0

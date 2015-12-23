@@ -4,7 +4,7 @@ import "log"
 
 type Card struct {
 	ID int
-	*Site
+	Site
 	Code    string
 	Group   string
 	Status  string
@@ -14,12 +14,12 @@ type Card struct {
 }
 
 func LoadCards() []Card {
-	rs, _ := db.Query("SELECT ID, code, siteID FROM Card")
+	rs, _ := db.Query("SELECT ID, siteID, code FROM Card")
 	cards := []Card{}
 	var card Card
-	var siteID int
+	//	var siteID int
 	for rs.Next() {
-		err := rs.Scan(&card.ID, &card.Code, &siteID)
+		err := rs.Scan(&card.ID, &card.Site.ID, &card.Code)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -28,7 +28,7 @@ func LoadCards() []Card {
 	return cards
 }
 
-func NewCard(site *Site, code string, group string) *Card {
+func NewCard(site Site, code string, group string) *Card {
 	c := new(Card)
 	c.Site = site
 	c.Code = code
