@@ -5,6 +5,18 @@ import (
 	"testing"
 )
 
+func init() {
+	InitDB("./server.db")
+	defer db.Close()
+	fmt.Println("TEST START: Initiate Sqlite3 'paybox.db'")
+
+	sites := LoadSites()
+	fmt.Println("Load Site slice:=> ", sites)
+	cards := LoadCards()
+	fmt.Println("Load Card slice:=>", cards)
+	fmt.Println()
+}
+
 func setup() (site *Site, card *Card, paybox, vendor *Device, trans *Trans) {
 	site = NewSite("SUS Lampoon")
 	card = NewCard(site, "123456", "PURSE")
