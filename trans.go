@@ -27,6 +27,7 @@ type Trans struct {
 }
 
 func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value, cash int) error {
+	// ตรวจสอบจำนวนเงินที่เติมต้องไม่น้อยกว่า 1 บาท
 	if value < 1 {
 		return errors.New("เงินไม่เพียงพอ ขั้นต่ำ 1 บาท")
 	}
