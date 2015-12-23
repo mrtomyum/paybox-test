@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -16,13 +17,15 @@ func init() {
 	fmt.Println()
 }
 
-func setup() (sites []Site, cards []Card, paybox, vendor []Device, trans *Trans) {
+func setup() (sites []Site, cards *Card, paybox, vendor *Device, trans *Trans) {
 	//	site := sites[0]
 	sites = LoadSites()
-	//	card := NewCard(sites[0], "123456", "PURSE")
-	cards = LoadCards()
-	paybox = LoadDevice(BOX)
-	vendor = LoadDevice(VENDOR)
+	card := NewCard(sites[0], "123456", "PURSE")
+	//	cards = LoadCards()
+	paybox = NewDevice(BOX, "Paybox1", "P001")
+	vendor = NewDevice(VENDOR, "V1", "V001")
+	//	paybox = LoadDevice(BOX)
+	//	vendor = LoadDevice(VENDOR)
 	trans = new(Trans)
 	//	v2  = NewDevice("V2", "VENDOR", "V002")
 	//	v3  = NewDevice("V3", "VENDOR", "V003")
@@ -30,13 +33,15 @@ func setup() (sites []Site, cards []Card, paybox, vendor []Device, trans *Trans)
 	return sites, card, paybox, vendor, trans
 }
 
-func setupTable() (sites []Site, cards []Card, paybox, vendor *Device, tn *Trans) {
+func setupTable() (sites []Site, cards []Card, payboxs, vendors []Device, tn *Trans) {
 	sites = LoadSites()
 	cards = LoadCards()
-	paybox = NewDevice("Paybox1", "BOX", "P001")
-	vendor = NewDevice("V1", "VENDOR", "V001")
+	//	paybox = NewDevice("Paybox1", "BOX", "P001")
+	payboxs = LoadDevice(BOX)
+	//	vendor = NewDevice("V1", "VENDOR", "V001")
+	vendors = LoadDevice(VENDOR)
 	tn = new(Trans)
-	return sites, cards, paybox, vendor, tn
+	return sites, cards, payboxs, vendors, tn
 }
 
 // เทสว่าการ์ดใหม่ต้องไม่มี code ซ้ำใน site เดียวกัน
@@ -110,9 +115,20 @@ func Test_TransJob1_CardDeposit(t *testing.T) {
 	)
 }
 
-func Test_Job12_CardDepositFromTable(t *testing.T) {
-	//	_, cards, device, host, tn := setupTable()
+// เทสคำนวณยอดคงเหลือในบัตร จากการเติมเงิน โดยใช้ข้อมูลจากตาราง Trans
+func Test_Job12_CardDepositCalc(t *testing.T) {
+	//	_, cards, boxs, vendors, tn := setupTable()
+	//	transJ1 := LoadTrans(J1_CARD_DEPOSIT)
+	card := LoadCard(1, "12345")
+	fmt.Println("Load Card=> ", card)
+	card.balance = 0
+	fmt.Println("Card.Balance=> ", card.balance)
+	card.Calc()
+	fmt.Println("Card.Balance after Calc=> ", card.balance)
 
+	if card.balance != -490 {
+		log.Fatalf("test 1.2 คำนวณไม่ตรง %d", card.balance)
+	}
 }
 
 func Test_TransJob11_CardDepositMustGreaterThan1(t *testing.T) {

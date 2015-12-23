@@ -22,7 +22,12 @@ type Device struct {
 	isOnline bool
 }
 
-func NewDevice(name, deviceType, serial string) *Device {
+func LoadDevice(DeviceType) []Device {
+	var d []Device
+	return d
+}
+
+func NewDevice(deviceType DeviceType, name, serial string) *Device {
 	d := new(Device)
 	d.Name = name
 	d.DeviceType = deviceType

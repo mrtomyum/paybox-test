@@ -9,7 +9,8 @@ import (
 type Job int
 
 const (
-	J1_CARD_DEPOSIT Job = iota
+	_ Job = iota
+	J1_CARD_DEPOSIT
 	J2_CARD_WITHDRAW
 	J3_SHOP_PAYMENT
 	J4_SHOP_REFUND
@@ -26,11 +27,16 @@ type Trans struct {
 	timeStamp time.Time
 }
 
+//func LoadTrans(Job) []Trans{
+//	trans := []Trans{}
+//
+//	return trans
+//}
+
 func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value, cash int) error {
 	if value < 1 {
 		return errors.New("เงินไม่เพียงพอ ขั้นต่ำ 1 บาท")
 	}
-
 	device.Debit(value)
 	card.Credit(value)
 
@@ -42,6 +48,7 @@ func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value
 	t.cash = cash
 	t.change = cash - value
 	t.timeStamp = time.Now()
+
 	return nil
 }
 func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, value int) error {
