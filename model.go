@@ -1,5 +1,6 @@
 package main
 
+// Site
 type Site struct {
 	Name string
 }

@@ -5,10 +5,6 @@ import (
 	"testing"
 )
 
-//func InitDB() *DB {
-//
-//}
-
 func setup() (site *Site, card *Card, paybox, vendor *Device, trans *Trans) {
 	site = NewSite("SUS Lampoon")
 	card = NewCard(site, "123456", "PURSE")
