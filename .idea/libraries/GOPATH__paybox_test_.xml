@@ -52,6 +52,7 @@
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/go/types/testdata" />
       <root url="file://$PROJECT_DIR$/../../golang/example/.git" />
       <root url="file://$PROJECT_DIR$/../../turret-io/go-menu/.git" />
+      <root url="file://$PROJECT_DIR$/../../../tom/working-with-go/.idea" />
       <root url="file://$PROJECT_DIR$/../../../tom/user/.idea" />
       <root url="file://$PROJECT_DIR$/../../../gopkg.in/check.v1/.git" />
       <root url="file://$PROJECT_DIR$/../../gorilla/sessions/.git" />

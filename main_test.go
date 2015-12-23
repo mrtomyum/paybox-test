@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+//func InitDB() *DB {
+//
+//}
+
 func setup() (site *Site, card *Card, paybox, vendor *Device, trans *Trans) {
 	site = NewSite("SUS Lampoon")
 	card = NewCard(site, "123456", "PURSE")
@@ -17,9 +21,10 @@ func setup() (site *Site, card *Card, paybox, vendor *Device, trans *Trans) {
 	return site, card, paybox, vendor, trans
 }
 
-// เทสสร้างบัตรใหม่
+// เทสว่าการ์ดใหม่ต้องไม่มี code ซ้ำใน site เดียวกัน
 func TestNewCard(t *testing.T) {
 	s, c, _, _, _ := setup()
+
 	if s.Name != "SUS Lampoon" {
 		t.Error("Expected name = 'SUS Lampoon'")
 	}
@@ -97,6 +102,7 @@ func Test_TransJob11_CardDepositMustGreaterThan1(t *testing.T) {
 		t.Errorf("ยอดเงินเติมน้อยกว่าขั้นต่ำ %d แต่ไม่แจ้งเตือน err", value)
 	}
 	fmt.Println("1.1 เทสเติมเงินน้อยกว่า 1 บาท ต้องแสดง Error=>", err)
+
 }
 
 // ชำระเงินจากบัตรให้ร้านค้า 20 บาท
