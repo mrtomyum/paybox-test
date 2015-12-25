@@ -146,7 +146,6 @@ func Test_TransJob11_CardDepositMustGreaterThan1(t *testing.T) {
 		t.Errorf("ยอดเงินเติมน้อยกว่าขั้นต่ำ %d แต่ไม่แจ้งเตือน err", value)
 	}
 	fmt.Println("1.1 เทสเติมเงินน้อยกว่า 1 บาท ต้องแสดง Error=>", err)
-
 }
 
 // ชำระเงินจากบัตรให้ร้านค้า 20 บาท

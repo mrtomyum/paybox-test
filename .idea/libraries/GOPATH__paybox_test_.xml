@@ -34,6 +34,7 @@
       <root url="file://$PROJECT_DIR$/.git" />
       <root url="file://$PROJECT_DIR$/../../mattn/go-sqlite3/.git" />
       <root url="file://$PROJECT_DIR$/../../../tom/working-with-go/.git" />
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in/guregu/null.v3/.git" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/go/ssa/ssautil/testdata" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/cmd/stringer/testdata" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/cmd/callgraph/testdata" />
@@ -51,6 +52,7 @@
       <root url="file://$PROJECT_DIR$/../../rogpeppe/godef/.git" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/go/types/testdata" />
       <root url="file://$PROJECT_DIR$/../../golang/example/.git" />
+      <root url="file://$PROJECT_DIR$/../paybox-test2/.idea" />
       <root url="file://$PROJECT_DIR$/../../turret-io/go-menu/.git" />
       <root url="file://$PROJECT_DIR$/../../../tom/working-with-go/.idea" />
       <root url="file://$PROJECT_DIR$/../../../tom/user/.idea" />
