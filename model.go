@@ -33,10 +33,10 @@ func NewShop(site Site, name string, vendor *Device) Shop {
 	return s
 }
 
-func ShopRevenueCalc(s *Site, sh *Shop, v *Device) (revenue int, err error) {
-	sh.Credit(sh.Vendor.balance * .7)
-	s.Debit(sh.Vendor.balance * .3)
-	sh.Vendor.Debit(sh.Vendor.balance)
-	revenue = sh.credit //สมมุติเก็บส่วนแบ่ง 30%
-	return revenue, nil
-}
+//func ShopRevenueCalc(s *Site, sh *Shop, v *Device) (revenue int, err error) {
+//	sh.Credit(sh.Vendor.balance * .7)
+//	s.Debit(sh.Vendor.balance * .3)
+//	sh.Vendor.Debit(sh.Vendor.balance)
+//	revenue = sh.credit //สมมุติเก็บส่วนแบ่ง 30%
+//	return revenue, nil
+//}

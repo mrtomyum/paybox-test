@@ -46,16 +46,16 @@ func setupTable() (sites []Site, cards []Card, payboxs, vendors []Device, tn *Tr
 
 // เทสว่าการ์ดใหม่ต้องไม่มี code ซ้ำใน site เดียวกัน
 func Test_NewObject(t *testing.T) {
-	s, c, _, _, _ := setup()
+	sites, cards, _, _, _ := setupTable()
 
-	if s.Name != "บริษัท ทดสอบ จำกัด" {
-		t.Error("Expected name = 'บริษัท ทดสอบ จำกัด'")
+	if sites[0].Name != "บริษัท ทดสอบ จำกัด" {
+		t.Error("Expected name = 'บริษัท ทดสอบ จำกัด' but=", sites[0].Name)
 	}
 	//	c := cards[0]
-	if c.Code != "123456" {
-		t.Error("Expected code = '123456'")
+	if cards[0].Code != "12345" {
+		t.Error("Expected code = '12345' but = ", cards[0].Code)
 	}
-	fmt.Println("Cards=> ", c)
+	fmt.Println("Cards=> ", cards)
 }
 
 // เทสคำนวณยอดคงเหลือบัตร
@@ -225,17 +225,17 @@ func Test_TransJob21_CardOverWithdraw(t *testing.T) {
 
 // ยอดเงินสามารถคิดแบ่งสัดส่วน ตามอัตราที่กำหนด รองรับการแบ่งจ่าย เศษสตางค์ 2 หลัก
 
-// เทสคำนวณเพื่อจ่ายเงินให้ร้านค้าหลังหักส่วนแบ่งสถานที่แล้ว 30% ของยอดคงเหลือในแต่ละ Device
-func Test_ShopBalancer(t *testing.T) {
-	s, _, _, v, _ := setup()
-	shop := NewShop(s, "ร้านข้าวมันไก่โต้ง", v)
-	v.balance = 1000
-	r, err := ShopRevenueCalc()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Shop revenue: ", r)
-}
+//// เทสคำนวณเพื่อจ่ายเงินให้ร้านค้าหลังหักส่วนแบ่งสถานที่แล้ว 30% ของยอดคงเหลือในแต่ละ Device
+//func Test_ShopBalancer(t *testing.T) {
+//	s, _, _, v, _ := setup()
+//	shop := NewShop(s, "ร้านข้าวมันไก่โต้ง", v)
+//	v.balance = 1000
+//	r, err := ShopRevenueCalc()
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	fmt.Println("Shop revenue: ", r)
+//}
 
 // Test Interface Balancer implement Method Debit(), Credit()
 //func Test_Balancer(t *testing.T) {
