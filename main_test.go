@@ -17,10 +17,10 @@ func init() {
 	fmt.Println()
 }
 
-func setup() (sites []Site, cards *Card, paybox, vendor *Device, trans *Trans) {
+func setup() (site Site, cards *Card, paybox, vendor *Device, trans *Trans) {
 	//	site := sites[0]
-	sites = LoadSites()
-	card := NewCard(sites[0], "123456", "PURSE")
+	site = Site{}
+	card := NewCard(site, "123456", "PURSE")
 	//	cards = LoadCards()
 	paybox = NewDevice(BOX, "Paybox1", "P001")
 	vendor = NewDevice(VENDOR, "V1", "V001")
@@ -30,7 +30,7 @@ func setup() (sites []Site, cards *Card, paybox, vendor *Device, trans *Trans) {
 	//	v2  = NewDevice("V2", "VENDOR", "V002")
 	//	v3  = NewDevice("V3", "VENDOR", "V003")
 	//	sh1 = NewShop(s, "ร้านข้าวมันไก่", v1)
-	return sites, card, paybox, vendor, trans
+	return site, card, paybox, vendor, trans
 }
 
 func setupTable() (sites []Site, cards []Card, payboxs, vendors []Device, tn *Trans) {
@@ -46,8 +46,8 @@ func setupTable() (sites []Site, cards []Card, payboxs, vendors []Device, tn *Tr
 
 // เทสว่าการ์ดใหม่ต้องไม่มี code ซ้ำใน site เดียวกัน
 func Test_NewObject(t *testing.T) {
-	sites, c, _, _, _ := setup()
-	s := sites[0]
+	s, c, _, _, _ := setup()
+
 	if s.Name != "บริษัท ทดสอบ จำกัด" {
 		t.Error("Expected name = 'บริษัท ทดสอบ จำกัด'")
 	}
@@ -223,12 +223,20 @@ func Test_TransJob21_CardOverWithdraw(t *testing.T) {
 	)
 }
 
-// เทสคำนวณเพื่อจ่ายเงินให้ร้านค้าหลังหักส่วนแบ่งสถานที่แล้ว 30%
-//func Test_ShopBalancer(t *testing.T)  {
-//	s, c, p, v, tn := setup()
-//	shop := NewShop(s, "ร้านข้าวมันไก่โต้ง", v)
-//
-//}
+// ยอดเงินสามารถคิดแบ่งสัดส่วน ตามอัตราที่กำหนด รองรับการแบ่งจ่าย เศษสตางค์ 2 หลัก
+
+// เทสคำนวณเพื่อจ่ายเงินให้ร้านค้าหลังหักส่วนแบ่งสถานที่แล้ว 30% ของยอดคงเหลือในแต่ละ Device
+func Test_ShopBalancer(t *testing.T) {
+	s, _, _, v, _ := setup()
+	shop := NewShop(s, "ร้านข้าวมันไก่โต้ง", v)
+	v.balance = 1000
+	r, err := ShopRevenueCalc()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Shop revenue: ", r)
+}
+
 // Test Interface Balancer implement Method Debit(), Credit()
 //func Test_Balancer(t *testing.T) {
 //

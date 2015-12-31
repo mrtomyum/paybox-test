@@ -6,8 +6,10 @@ import (
 )
 
 type Site struct {
-	ID   int
-	Name string
+	ID     int
+	Name   string
+	debit  int
+	credit int
 }
 
 func NewSite(name string) *Site {
