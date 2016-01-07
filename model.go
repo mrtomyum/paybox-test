@@ -9,9 +9,9 @@ type Shop struct {
 	Site
 	Name    string
 	Vendor  *Device
-	balance int
 	debit   int
 	credit  int
+	balance int
 }
 
 func (sh *Shop) Debit(value int) {
@@ -33,10 +33,10 @@ func NewShop(site Site, name string, vendor *Device) Shop {
 	return s
 }
 
-func ShopRevenueCalc(s *Site, sh *Shop, v *Device) (revenue int, err error) {
-	sh.Credit(sh.Vendor.balance * .7)
-	s.Debit(sh.Vendor.balance * .3)
-	sh.Vendor.Debit(sh.Vendor.balance)
-	revenue = sh.credit //สมมุติเก็บส่วนแบ่ง 30%
+func (s *Shop) RevenueCalc() (revenue int, err error) {
+	s.Credit(s.Vendor.balance * 70 / 100)
+	s.Debit(s.Vendor.balance * 30 / 100)
+	s.Vendor.Debit(s.Vendor.balance)
+	revenue = s.credit //สมมุติเก็บส่วนแบ่ง 30%
 	return revenue, nil
 }

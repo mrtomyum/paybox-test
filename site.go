@@ -6,17 +6,18 @@ import (
 )
 
 type Site struct {
-	ID     int
-	Name   string
-	debit  int
-	credit int
+	ID      int
+	Name    string
+	debit   int
+	credit  int
+	balance int
 }
 
-func NewSite(name string) *Site {
-	s := new(Site)
-	s.Name = name
-	return s
-}
+//func NewSite(name string) *Site {
+//	s := new(Site)
+//	s.Name = name
+//	return s
+//}
 
 func LoadSites() []Site {
 	rs, err := db.Query("SELECT ID, Name FROM site ")
@@ -35,4 +36,9 @@ func LoadSites() []Site {
 	}
 	fmt.Println("Sites = ", sites)
 	return sites
+}
+
+func (s *Site) Debit(value int) {
+	s.debit = value
+	s.balance = +s.debit
 }
