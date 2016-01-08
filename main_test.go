@@ -17,11 +17,23 @@ func init() {
 	fmt.Println()
 }
 
-func setup() (site Site, cards *Card, paybox, vendor *Device, trans *Trans) {
+func setup() (s Site, cards *Card, paybox, vendor *Device, trans *Trans) {
 	//	site := sites[0]
-	site = Site{}
-	card := NewCard(site, "123456", "PURSE")
+	s = Site{}
+	card := new(Card)
+	card.Site = s
+	card.Code = "123456"
+	card.Group = "PURSE"
+	card.Status = "OPEN"
+	card.balance = 0
+	//	card := Card{
+	//		Site: site,
+	//		Code: "123456",
+	//		Group: "PURSE",
+	//		Status: "OPEN",
+	//	}
 	//	cards = LoadCards()
+
 	paybox = NewDevice(BOX, "Paybox1", "P001")
 	vendor = NewDevice(VENDOR, "V1", "V001")
 	//	paybox = LoadDevice(BOX)
@@ -30,7 +42,7 @@ func setup() (site Site, cards *Card, paybox, vendor *Device, trans *Trans) {
 	//	v2  = NewDevice("V2", "VENDOR", "V002")
 	//	v3  = NewDevice("V3", "VENDOR", "V003")
 	//	sh1 = NewShop(s, "ร้านข้าวมันไก่", v1)
-	return site, card, paybox, vendor, trans
+	return s, card, paybox, vendor, trans
 }
 
 //func setupTable() (sites []Site, cards []Card, payboxs, vendors []Device, tn *Trans) {

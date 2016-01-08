@@ -44,14 +44,14 @@ func LoadCards() []Card {
 	return cards
 }
 
-func NewCard(site Site, code string, group string) *Card {
-	c := new(Card)
+func (c *Card) New(site Site, code string, group string) {
+//	c := new(Card)
 	c.Site = site
 	c.Code = code
 	c.Group = group
 	c.Status = "OPEN"
 	c.balance = 0
-	return c
+//	return c
 }
 
 func (c *Card) Debit(value int) {
