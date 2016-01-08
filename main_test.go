@@ -17,7 +17,7 @@ func init() {
 	fmt.Println()
 }
 
-func setup() (s Site, cards *Card, paybox, vendor *Device, trans *Trans) {
+func setup() (s Site, cards *Card, paybox *Box, vendor *Vendor, trans *Trans) {
 	//	site := sites[0]
 	s = Site{}
 	card := new(Card)
@@ -34,8 +34,21 @@ func setup() (s Site, cards *Card, paybox, vendor *Device, trans *Trans) {
 	//	}
 	//	cards = LoadCards()
 
-	paybox = NewDevice(BOX, "Paybox1", "P001")
-	vendor = NewDevice(VENDOR, "V1", "V001")
+//	paybox = NewDevice(BOX, "Paybox1", "P001")
+	paybox = &Box{
+		Device: Device{
+			Name: "Paybox1",
+			Serial: "P001",
+		},
+		Cash: 0,
+		isLockOpen: false,
+	}
+	vendor = &Vendor{
+		Device: Device{
+			Name: "V1",
+			Serial: "V001",
+		},
+	}
 	//	paybox = LoadDevice(BOX)
 	//	vendor = LoadDevice(VENDOR)
 	trans = new(Trans)
@@ -109,7 +122,6 @@ func Test_TransJob1_CardDeposit(t *testing.T) {
 	cash := 100
 	tn.Job1_CardDeposit( // เติมเงิน 50 ใส่เงิน 100 ทอน 50
 		c,     // Card
-		p,     // Device
 		p,     // Host
 		value, // Value
 		cash,  // CashReceive
@@ -150,7 +162,6 @@ func Test_TransJob11_CardDepositMustGreaterThan1(t *testing.T) {
 	err := tn.Job1_CardDeposit(
 		c,     // Card
 		p,     // Device
-		p,     // Host
 		value, // Value
 		cash,  // CashReceive
 	)
@@ -169,8 +180,7 @@ func Test_TransJob3_ShopPayment(t *testing.T) {
 	v.balance = 0
 	tn.Job3_ShopPayment(
 		c,     // Card
-		v,     // Device
-		p,     // Host
+		v,     // Vendor
 		value, // Value
 	)
 	if c.balance != -80 ||
@@ -195,7 +205,6 @@ func Test_TransJob2_CardWithdraw(t *testing.T) {
 	v.balance = -20
 	err := tn.Job2_CardWithdraw(
 		c,     // Card
-		p,     // Device Paybox1
 		p,     // Host Paybox1
 		value, // Value 30
 	)
@@ -219,7 +228,6 @@ func Test_TransJob21_CardOverWithdraw(t *testing.T) {
 	value := 100
 	err := tn.Job2_CardWithdraw(
 		c,     // Card
-		p,     // Device
 		p,     // Host
 		value, // Value
 	)

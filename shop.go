@@ -3,7 +3,7 @@ package main
 type Shop struct {
 	Site
 	Name    string
-	Vendor  *Device
+	Vendor  *Vendor
 	debit   int
 	credit  int
 	balance int
@@ -19,7 +19,7 @@ func (sh *Shop) Credit(value int) {
 	sh.balance = sh.balance + sh.credit
 }
 
-func NewShop(site Site, name string, vendor *Device) Shop {
+func NewShop(site Site, name string, vendor *Vendor) Shop {
 	s := Shop{}
 	s.Site = site
 	s.Name = name

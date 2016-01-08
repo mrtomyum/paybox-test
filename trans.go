@@ -19,8 +19,8 @@ const (
 type Trans struct {
 	Job
 	*Card
-	device    *Device
-	host      *Device
+	vendor    *Vendor
+	host      *Box
 	value     int
 	cash      int
 	change    int
@@ -33,16 +33,16 @@ type Trans struct {
 //	return trans
 //}
 
-func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value, cash int) error {
+func (t *Trans) Job1_CardDeposit(card *Card, host *Box, value, cash int) error {
 	if value < 1 {
 		return errors.New("เงินไม่เพียงพอ ขั้นต่ำ 1 บาท")
 	}
-	device.Debit(value)
+	host.Debit(value)
 	card.Credit(value)
 
 	t.Job = J1_CARD_DEPOSIT
 	t.Card = card
-	t.device = device
+	t.vendor = nil
 	t.host = host
 	t.value = value
 	t.cash = cash
@@ -51,7 +51,7 @@ func (t *Trans) Job1_CardDeposit(card *Card, device *Device, host *Device, value
 
 	return nil
 }
-func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, value int) error {
+func (t *Trans) Job2_CardWithdraw(card *Card, host *Box, value int) error {
 	// ควรเช็คก่อนว่า card.balance พอหรือไม่?
 	abs := int(math.Abs(float64(card.balance))) // math.Abs use float64
 	if value > abs {
@@ -59,11 +59,11 @@ func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, valu
 	}
 	// Balancer
 	card.Debit(value)
-	device.Credit(value)
+	host.Credit(value)
 
 	t.Job = J2_CARD_WITHDRAW
 	t.Card = card
-	t.device = device
+	t.vendor = nil
 	t.host = host
 	t.value = card.balance
 	t.cash = 0
@@ -72,14 +72,14 @@ func (t *Trans) Job2_CardWithdraw(card *Card, device *Device, host *Device, valu
 	return nil
 }
 
-func (t *Trans) Job3_ShopPayment(card *Card, device *Device, host *Device, value int) *Trans {
+func (t *Trans) Job3_ShopPayment(card *Card, vendor *Vendor, value int) *Trans {
 	card.Debit(value)
-	device.Credit(value)
+	vendor.Credit(value)
 
 	t.Job = J3_SHOP_PAYMENT
 	t.Card = card
-	t.device = device
-	t.host = host
+	t.vendor = vendor
+	t.host = nil
 	t.value = value
 	t.cash = 0
 	t.change = 0

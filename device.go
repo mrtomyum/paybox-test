@@ -1,16 +1,16 @@
 package main
 
-type DeviceType int
-
-const (
-	BOX DeviceType = iota
-	VENDOR
-	PARKING_LOCK
-)
+//type DeviceType int
+//
+//const (
+//	BOX DeviceType = iota
+//	VENDOR
+//	PARKING_LOCK
+//)
 
 type Device struct {
 	*Site
-	DeviceType
+//	DeviceType
 	ID       int
 	Host     *Device
 	Name     string
@@ -21,16 +21,25 @@ type Device struct {
 	isHost   bool
 	isOnline bool
 }
-
-func LoadDevice(DeviceType) []Device {
-	var d []Device
-	return d
+type Box struct {
+	Device
+	Cash int
+	isLockOpen bool //ตู้เซฟเก็บเงินเปิดอยู่หรือไม่
 }
 
-func NewDevice(deviceType DeviceType, name, serial string) *Device {
+type Vendor struct {
+	Device
+}
+
+//func LoadDevice(DeviceType) []Device {
+//	var d []Device
+//	return d
+//}
+
+func NewDevice(name, serial string) *Device {
 	d := new(Device)
 	d.Name = name
-	d.DeviceType = deviceType
+//	d.DeviceType = deviceType
 	d.Serial = serial
 	d.debit = 0
 	d.credit = 0
