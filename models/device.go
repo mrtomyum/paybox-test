@@ -1,4 +1,4 @@
-package main
+package models
 
 //type DeviceType int
 //
@@ -10,7 +10,7 @@ package main
 
 type Device struct {
 	*Site
-//	DeviceType
+	//	DeviceType
 	ID       int
 	Host     *Device
 	Name     string
@@ -23,8 +23,8 @@ type Device struct {
 }
 type Box struct {
 	Device
-	Cash int
-	isLockOpen bool //ตู้เซฟเก็บเงินเปิดอยู่หรือไม่
+	Cash       int
+	IsLockOpen bool //ตู้เซฟเก็บเงินเปิดอยู่หรือไม่
 }
 
 type Vendor struct {
@@ -39,7 +39,7 @@ type Vendor struct {
 func NewDevice(name, serial string) *Device {
 	d := new(Device)
 	d.Name = name
-//	d.DeviceType = deviceType
+	//	d.DeviceType = deviceType
 	d.Serial = serial
 	d.debit = 0
 	d.credit = 0
@@ -49,12 +49,28 @@ func NewDevice(name, serial string) *Device {
 	return d
 }
 
-func (d *Device) Debit(value int) {
-	d.debit = value
-	d.balance = d.balance + d.debit
+func (d *Device) Debit() int {
+	return d.debit
 }
 
-func (d *Device) Credit(value int) {
-	d.credit = value
-	d.balance = d.balance - d.credit
+func (d *Device) SetDebit(value int) {
+	d.debit += value
+	d.balance += value
+}
+
+func (d *Device) Credit() int {
+	return d.credit
+}
+
+func (d *Device) SetCredit(value int) {
+	d.credit -= value
+	d.balance -= value
+}
+
+func (d *Device) Balance() int {
+	return d.balance
+}
+
+func (d *Device) SetBalance(value int) {
+	d.balance = value
 }

@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"fmt"
@@ -39,6 +39,6 @@ func LoadSites() []Site {
 }
 
 func (s *Site) Debit(value int) {
-	s.debit = value
-	s.balance = +s.debit
+	s.debit = +value
+	s.balance = +value
 }

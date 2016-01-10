@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"fmt"
@@ -45,23 +45,40 @@ func LoadCards() []Card {
 }
 
 func (c *Card) New(site Site, code string, group string) {
-//	c := new(Card)
+	//	c := new(Card)
 	c.Site = site
 	c.Code = code
 	c.Group = group
 	c.Status = "OPEN"
 	c.balance = 0
-//	return c
+	//	return c
 }
 
-func (c *Card) Debit(value int) {
-	c.debit = value
-	c.balance = c.balance + c.debit
+func (c *Card) Debit() int {
+	return c.debit
 }
 
-func (c *Card) Credit(value int) {
-	c.credit = value
-	c.balance = c.balance - c.credit
+func (c *Card) SetDebit(value int) {
+	c.debit += value
+	c.balance += value
+}
+
+func (c *Card) Credit() int {
+	return c.credit
+}
+
+func (c *Card) SetCredit(value int) {
+	c.credit -= value
+	c.balance -= value
+}
+
+func (c *Card) Balance() int {
+	return c.balance
+}
+
+func (c *Card) SetBalance(value int) error {
+	c.balance = value
+	return nil
 }
 
 func (c *Card) Calc() {

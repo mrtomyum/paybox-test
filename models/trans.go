@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"errors"
@@ -23,7 +23,7 @@ type Trans struct {
 	host      *Box
 	value     int
 	cash      int
-	change    int
+	Change    int
 	timeStamp time.Time
 }
 
@@ -37,8 +37,8 @@ func (t *Trans) Job1_CardDeposit(card *Card, host *Box, value, cash int) error {
 	if value < 1 {
 		return errors.New("เงินไม่เพียงพอ ขั้นต่ำ 1 บาท")
 	}
-	host.Debit(value)
-	card.Credit(value)
+	host.SetDebit(value)
+	card.SetCredit(value)
 
 	t.Job = J1_CARD_DEPOSIT
 	t.Card = card
@@ -46,7 +46,7 @@ func (t *Trans) Job1_CardDeposit(card *Card, host *Box, value, cash int) error {
 	t.host = host
 	t.value = value
 	t.cash = cash
-	t.change = cash - value
+	t.Change = cash - value
 	t.timeStamp = time.Now()
 
 	return nil
@@ -58,8 +58,8 @@ func (t *Trans) Job2_CardWithdraw(card *Card, host *Box, value int) error {
 		return errors.New("ไม่สามารถถอนเงิน'เกิน'มูลค่าคงเหลือในบัตร")
 	}
 	// Balancer
-	card.Debit(value)
-	host.Credit(value)
+	card.SetDebit(value)
+	host.SetCredit(value)
 
 	t.Job = J2_CARD_WITHDRAW
 	t.Card = card
@@ -67,14 +67,14 @@ func (t *Trans) Job2_CardWithdraw(card *Card, host *Box, value int) error {
 	t.host = host
 	t.value = card.balance
 	t.cash = 0
-	t.change = t.cash - t.value
+	t.Change = t.cash - t.value
 	t.timeStamp = time.Now()
 	return nil
 }
 
 func (t *Trans) Job3_ShopPayment(card *Card, vendor *Vendor, value int) *Trans {
-	card.Debit(value)
-	vendor.Credit(value)
+	card.SetDebit(value)
+	vendor.SetCredit(value)
 
 	t.Job = J3_SHOP_PAYMENT
 	t.Card = card
@@ -82,7 +82,7 @@ func (t *Trans) Job3_ShopPayment(card *Card, vendor *Vendor, value int) *Trans {
 	t.host = nil
 	t.value = value
 	t.cash = 0
-	t.change = 0
+	t.Change = 0
 	t.timeStamp = time.Now()
 	return t
 }
