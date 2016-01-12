@@ -21,6 +21,7 @@ func init() {
 func setup() (s m.Site, card *m.Card, box *m.Box, vendor *m.Vendor, trans *m.Trans) {
 	// Site
 	s = m.Site{
+		ID:   1,
 		Name: "บริษัท นพดลพานิช จำกัด",
 	}
 	s.SetBalance(0)
@@ -93,9 +94,11 @@ func setup() (s m.Site, card *m.Card, box *m.Box, vendor *m.Vendor, trans *m.Tra
 func TestCardBalance(t *testing.T) {
 	_, c, _, _, _ := setup()
 	//	c := cards[1]
+	// เติมเงิน 100 บาท
 	if c.SetCredit(100); c.Balance() != -100 {
 		t.Errorf("Expected credit -100 but %v", c.Balance())
 	}
+	// ลองถอนเงินออกจากบัตร
 	if c.SetDebit(30); c.Balance() != -70 {
 		t.Errorf("Expected card balance = -70 but %v", c.Balance())
 	}
