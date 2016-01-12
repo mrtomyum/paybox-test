@@ -18,8 +18,8 @@ type Device struct {
 	debit    int
 	credit   int
 	balance  int
-	isHost   bool
-	isOnline bool
+	IsHost   bool
+	IsOnline bool
 }
 type Box struct {
 	Device
@@ -44,8 +44,8 @@ func NewDevice(name, serial string) *Device {
 	d.debit = 0
 	d.credit = 0
 	d.balance = 0
-	d.isHost = false
-	d.isOnline = false
+	d.IsHost = false
+	d.IsOnline = false
 	return d
 }
 

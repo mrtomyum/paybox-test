@@ -42,3 +42,11 @@ func (s *Site) Debit(value int) {
 	s.debit = +value
 	s.balance = +value
 }
+
+func (s *Site) SetBalance(value int) {
+	s.balance = value
+}
+
+func (s *Site) Balance() int {
+	return s.balance
+}

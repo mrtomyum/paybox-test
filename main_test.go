@@ -19,8 +19,13 @@ func init() {
 }
 
 func setup() (s m.Site, card *m.Card, box *m.Box, vendor *m.Vendor, trans *m.Trans) {
-	//	site := sites[0]
-	s = m.Site{}
+	// Site
+	s = m.Site{
+		Name: "บริษัท นพดลพานิช จำกัด",
+	}
+	s.SetBalance(0)
+
+	// Card
 	card = new(m.Card)
 	card.Site = s
 	card.Code = "123456"
@@ -261,7 +266,7 @@ func Test_ShopBalancer(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("3.1 Shop revenue: ", r)
+	fmt.Printf("3.1 Site: %v Balance: %v\nShop revenue: %v", s.Name, s.Balance(), r)
 }
 
 // Test Interface Balancer implement Method Debit(), Credit()
