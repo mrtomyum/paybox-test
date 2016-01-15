@@ -21,10 +21,25 @@ type Trans struct {
 	*Card
 	*Vendor
 	*Box
-	value     int
-	cash      int
-	Change    int
-	timeStamp time.Time
+	*Site
+	siteTransID int
+	value       int
+	cash        int
+	Change      int
+	timeStamp   time.Time
+}
+
+type TransJSON struct {
+	JobID       string
+	CardID      int
+	VendorID    int
+	BoxID       int
+	SiteID      int
+	SiteTransID int
+	Value       int
+	Cash        int
+	Change      int
+	TimeStamp   string
 }
 
 //func LoadTrans(Job) []Trans{
@@ -33,7 +48,7 @@ type Trans struct {
 //	return trans
 //}
 
-func (t *Trans) Import(j Job, c *Card, v *Vendor, b *Box, value int, ca int, ch int) {
+func (t *Trans) Import(j Job, s *Site, siteTransID int, c *Card, v *Vendor, b *Box, value int, ca int, ch int) {
 	t.Job = j
 	t.Card = c
 	t.Vendor = v
