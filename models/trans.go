@@ -30,7 +30,7 @@ type Trans struct {
 }
 
 type TransJSON struct {
-	JobID       string
+	JobID       int
 	CardID      int
 	VendorID    int
 	BoxID       int
