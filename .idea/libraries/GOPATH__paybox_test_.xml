@@ -1,35 +1,22 @@
 <component name="libraryTable">
   <library name="GOPATH &lt;paybox-test&gt;">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../lab_text_2_json" />
       <root url="file://$PROJECT_DIR$/../TDD" />
-      <root url="file://$PROJECT_DIR$/../json_test" />
       <root url="file://$PROJECT_DIR$/../github.com" />
       <root url="file://$PROJECT_DIR$/../GoTest" />
       <root url="file://$PROJECT_DIR$/../golang.org" />
-      <root url="file://$PROJECT_DIR$/../git.eclipse.org" />
       <root url="file://$PROJECT_DIR$/../.idea" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
     <excluded>
-      <root url="file://$PROJECT_DIR$/../github.com/mattn/go-sqlite3/_example" />
-      <root url="file://$PROJECT_DIR$" />
-      <root url="file://$PROJECT_DIR$/../lab_text_2_json/.idea" />
-      <root url="file://$PROJECT_DIR$/../golang.org/x/net/html/testdata" />
-      <root url="file://$PROJECT_DIR$/../TDD/.idea" />
-      <root url="file://$PROJECT_DIR$/../github.com/mattn/go-sqlite3/.git" />
-      <root url="file://$PROJECT_DIR$/../GoTest/.git" />
       <root url="file://$PROJECT_DIR$/../golang.org/x/crypto/ssh/testdata" />
       <root url="file://$PROJECT_DIR$/../github.com/denisenkom/go-mssqldb/.git" />
       <root url="file://$PROJECT_DIR$/../golang.org/x/crypto/sha3/testdata" />
+      <root url="file://$PROJECT_DIR$" />
       <root url="file://$PROJECT_DIR$/../golang.org/x/crypto/.git" />
-      <root url="file://$PROJECT_DIR$/../github.com/pborman/uuid/.git" />
-      <root url="file://$PROJECT_DIR$/../golang.org/x/net/html/charset/testdata" />
-      <root url="file://$PROJECT_DIR$/../golang.org/x/net/.git" />
-      <root url="file://$PROJECT_DIR$/../golang.org/x/net/http2/testdata" />
-      <root url="file://$PROJECT_DIR$/../git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git/.git" />
-      <root url="file://$PROJECT_DIR$/../json_test/.idea" />
+      <root url="file://$PROJECT_DIR$/../TDD/.idea" />
+      <root url="file://$PROJECT_DIR$/../GoTest/.git" />
       <root url="file://$PROJECT_DIR$/../GoTest/.idea" />
       <root url="file://$PROJECT_DIR$/../.idea" />
     </excluded>
