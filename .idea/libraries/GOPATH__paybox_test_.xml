@@ -49,6 +49,7 @@
       <root url="file://$PROJECT_DIR$/../../golang/lint/testdata" />
       <root url="file://$PROJECT_DIR$/../../golang/lint/.git" />
       <root url="file://$PROJECT_DIR$/../../smartystreets/assertions/.git" />
+      <root url="file://$PROJECT_DIR$/../nava-csv/.idea" />
       <root url="file://$PROJECT_DIR$/../../jmoiron/sqlx/.git" />
       <root url="file://$PROJECT_DIR$/../../rogpeppe/godef/.git" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/go/types/testdata" />

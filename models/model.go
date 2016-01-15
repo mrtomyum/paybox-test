@@ -1,4 +1,4 @@
-package main
+package models
 
 type Balancer interface {
 	Debit(value int)
