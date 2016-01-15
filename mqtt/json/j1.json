@@ -1,0 +1,12 @@
+{
+	"JobID":1,
+	"CardID":1,
+	"VendorID":1,
+	"BoxID":1,
+	"SiteID":1,
+	"SiteTransID":1,
+	"Value":80,
+	"Cash":100,
+	"Change":20,
+	"TimeStamp":"15/01/2016 17:01:75.998"
+}
