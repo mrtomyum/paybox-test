@@ -19,8 +19,8 @@ const (
 type Trans struct {
 	Job
 	*Card
-	vendor    *Vendor
-	host      *Box
+	*Vendor
+	*Box
 	value     int
 	cash      int
 	Change    int
@@ -33,6 +33,17 @@ type Trans struct {
 //	return trans
 //}
 
+func (t *Trans) Import(j Job, c *Card, v *Vendor, b *Box, value int, ca int, ch int) {
+	t.Job = j
+	t.Card = c
+	t.Vendor = v
+	t.Box = b
+	t.value = value
+	t.cash = ca
+	t.Change = ch
+	//	t.timeStamp = time
+}
+
 func (t *Trans) Job1_CardDeposit(card *Card, host *Box, value, cash int) error {
 	if value < 1 {
 		return errors.New("เงินไม่เพียงพอ ขั้นต่ำ 1 บาท")
@@ -42,8 +53,8 @@ func (t *Trans) Job1_CardDeposit(card *Card, host *Box, value, cash int) error {
 
 	t.Job = J1_CARD_DEPOSIT
 	t.Card = card
-	t.vendor = nil
-	t.host = host
+	t.Vendor = nil
+	t.Box = host
 	t.value = value
 	t.cash = cash
 	t.Change = cash - value
@@ -63,8 +74,8 @@ func (t *Trans) Job2_CardWithdraw(card *Card, host *Box, value int) error {
 
 	t.Job = J2_CARD_WITHDRAW
 	t.Card = card
-	t.vendor = nil
-	t.host = host
+	t.Vendor = nil
+	t.Box = host
 	t.value = card.balance
 	t.cash = 0
 	t.Change = t.cash - t.value
@@ -78,8 +89,8 @@ func (t *Trans) Job3_ShopPayment(card *Card, vendor *Vendor, value int) *Trans {
 
 	t.Job = J3_SHOP_PAYMENT
 	t.Card = card
-	t.vendor = vendor
-	t.host = nil
+	t.Vendor = vendor
+	t.Box = nil
 	t.value = value
 	t.cash = 0
 	t.Change = 0
