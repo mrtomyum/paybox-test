@@ -87,6 +87,7 @@
       <root url="file://$PROJECT_DIR$/../../gorilla/securecookie/.git" />
       <root url="file://$PROJECT_DIR$/../../golang/protobuf/protoc-gen-go/testdata" />
       <root url="file://$PROJECT_DIR$/../../smartystreets/goconvey/.git" />
+      <root url="file://$PROJECT_DIR$/../nava-mock/.idea" />
       <root url="file://$PROJECT_DIR$/../../chriskempson/tomorrow-theme/.git" />
       <root url="file://$PROJECT_DIR$/../../hashicorp/raft/.idea" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/go/callgraph/cha/testdata" />
@@ -98,6 +99,7 @@
       <root url="file://$PROJECT_DIR$/../../elithrar/simple-scrypt/.git" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/crypto/ssh/testdata" />
       <root url="file://$PROJECT_DIR$/../../nsf/gocode/_testing" />
+      <root url="file://$PROJECT_DIR$/../db/.idea" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/net/.git" />
       <root url="file://$PROJECT_DIR$/../../../golang.org/x/tools/go/gccgoimporter/testdata" />
       <root url="file://$PROJECT_DIR$/../../gorilla/context/.git" />
