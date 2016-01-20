@@ -15,6 +15,10 @@ func Test_print_Json_Single_Record(t *testing.T){
 	}
 
 
+
+
+
+
 //	if mqMsg.SiteID != 1 {
 //		t.Fatal("error ",mqMsg)
 //	}
