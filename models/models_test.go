@@ -76,18 +76,39 @@ func setup() (s Site, card *Card, box *Box, vendor *Vendor, trans *Trans) {
 //}
 
 // เทสว่าการ์ดใหม่ต้องไม่มี code ซ้ำใน site เดียวกัน
-//func Test_NewObject(t *testing.T) {
-//	s, c, _, _, _ := setup()
-//	// Test Card
-//	if s.Name != "บริษัท ทดสอบ จำกัด" {
-//		t.Error("Expected name = 'บริษัท ทดสอบ จำกัด'")
-//	}
-//	//	Test Card
-//	if c.Code != "123456" {
-//		t.Error("Expected code = '123456'")
-//	}
-//	fmt.Println("Cards=> ", c)
-//}
+func Test_NewCardNotDup(t *testing.T) {
+	// setup new instant site
+	s := new(Site)
+	// Read first site from db
+	err := db.QueryRow("SELECT ID, name FROM Site WHERE ID = 1").Scan(&s.ID, &s.Name)
+	if err != nil {
+		t.Error("Error QueryRow from Site", err)
+	}
+	// Read all Card from db
+	c := new(Card)
+	r, err := db.Query("SELECT ID, code from Card WHERE siteID = ?", s.ID)
+	defer r.Close()
+	if err != nil {
+		t.Error(err)
+	}
+
+	// จะหารายการซ้ำได้ยังไง?
+
+	for r.Next() {
+		if err := r.Scan(&c.ID, &c.Code); err != nil {
+			t.Error(err)
+		}
+		if err := r.Err(); err != nil {
+			log.Fatal(err)
+		}
+	}
+	// if duplicated card exist in table return error
+	//	Test Card
+	if c.Code != "123456" {
+		t.Error("Expected code = '123456'")
+	}
+	fmt.Println("Cards=> ", c)
+}
 
 // เทสคำนวณยอดคงเหลือบัตร
 func TestCardBalance(t *testing.T) {
