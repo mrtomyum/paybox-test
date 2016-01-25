@@ -13,9 +13,9 @@ func InitDB(conn string) {
 	db, err = sql.Open("sqlite3", conn)
 
 	if err != nil {
-		log.Panic(err)
+		log.Panic("Cannot Open DB: ", err)
 	}
 	if err = db.Ping(); err != nil {
-		log.Panic(err)
+		log.Panic("Ping error:", err)
 	}
 }

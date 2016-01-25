@@ -9,7 +9,7 @@ import (
 func init() {
 	InitDB("./server.db")
 	//	defer db.Close()
-	fmt.Println("TEST START: Initiate Sqlite3 'paybox.db'")
+	fmt.Println("TEST START>>>: Initiate Sqlite3 'paybox.db'")
 	sites := LoadSites()
 	fmt.Println("Load Site slice:=> ", sites)
 	cards := LoadCards()
@@ -104,10 +104,10 @@ func Test_NewCardNotDup(t *testing.T) {
 	}
 	// if duplicated card exist in table return error
 	//	Test Card
-	if c.Code != "123456" {
-		t.Error("Expected code = '123456'")
-	}
-	fmt.Println("Cards=> ", c)
+	//	if c.Code != "123456" {
+	//		t.Error("Expected code = '123456'")
+	//	}
+	//	fmt.Println("Cards=> ", c)
 }
 
 // เทสคำนวณยอดคงเหลือบัตร

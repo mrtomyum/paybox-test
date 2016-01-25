@@ -20,7 +20,7 @@ type Site struct {
 //}
 
 func LoadSites() []Site {
-	rs, err := db.Query("SELECT ID, Name FROM site ")
+	rs, err := db.Query("SELECT ID, name FROM Site ")
 	if err != nil {
 		log.Fatal(err)
 	}
