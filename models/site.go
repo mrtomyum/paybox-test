@@ -20,7 +20,7 @@ type Site struct {
 //}
 
 func LoadSites() []Site {
-	rs, err := db.Query("SELECT ID, name FROM Site ")
+	rs, err := db.Query("SELECT ID, Name FROM Site ")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func LoadSites() []Site {
 	return sites
 }
 
-func (s *Site) Debit(value int) {
+func (s *Site) SetDebit(value int) {
 	s.debit = +value
 	s.balance = +value
 }

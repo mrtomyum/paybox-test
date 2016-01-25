@@ -1,5 +1,7 @@
 package models
 
+import "errors"
+
 //type DeviceType int
 //
 //const (
@@ -24,7 +26,15 @@ type Device struct {
 type Box struct {
 	Device
 	Cash       int
-	IsLockOpen bool //ตู้เซฟเก็บเงินเปิดอยู่หรือไม่
+	isLockOpen bool //ตู้เซฟเก็บเงินเปิดอยู่หรือไม่
+}
+
+func (b *Box) OpenLock() error {
+	if b.isLockOpen != false {
+		return errors.New("Lock already open")
+	}
+	b.isLockOpen = true
+	return nil
 }
 
 type Vendor struct {

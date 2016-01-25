@@ -9,7 +9,7 @@ import (
 func init() {
 	InitDB("./server.db")
 	//	defer db.Close()
-	fmt.Println("TEST START>>>: Initiate Sqlite3 'paybox.db'")
+	fmt.Println(">>TEST START: Initiate Sqlite3 'server.db'")
 	sites := LoadSites()
 	fmt.Println("Load Site slice:=> ", sites)
 	cards := LoadCards()
@@ -47,7 +47,7 @@ func setup() (s Site, card *Card, box *Box, vendor *Vendor, trans *Trans) {
 			Serial: "P001",
 		},
 		Cash:       0,
-		IsLockOpen: false,
+		isLockOpen: false,
 	}
 	vendor = &Vendor{
 		Device: Device{
